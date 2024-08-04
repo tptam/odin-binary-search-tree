@@ -1,6 +1,6 @@
-function Node(value = null) {
+function Node(data = null) {
   return {
-    value,
+    data,
     left: null,
     right: null,
   };
