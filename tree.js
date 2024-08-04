@@ -26,6 +26,21 @@ class Tree {
   get root() {
     return this.#root;
   }
+
+  has(data) {
+    let current = this.#root;
+    while (current !== null) {
+      if (data === current.data) {
+        return true;
+      }
+      if (data < current.data) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+    }
+    return false;
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
