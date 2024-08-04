@@ -41,6 +41,28 @@ class Tree {
     }
     return false;
   }
+
+  insert(data) {
+    let current = this.#root;
+    while (current !== null) {
+      if (data === current.data) {
+        return;
+      }
+      if (data < current.data) {
+        if (current.left === null) {
+          current.left = new Node(data);
+          return;
+        }
+        current = current.left;
+      } else {
+        if (current.right === null) {
+          current.right = new Node(data);
+          return;
+        }
+        current = current.right;
+      }
+    }
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
