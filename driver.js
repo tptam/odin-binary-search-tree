@@ -1,93 +1,66 @@
 import { Tree, prettyPrint } from "./tree.js";
 
-const test = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+// Create a binary search tree from an array of random numbers < 100.
+// You can create a function that returns an array of random numbers
+// every time you call it if you wish.
 
-prettyPrint(test.root);
-// │           ┌── 6345
-// │       ┌── 324
-// │   ┌── 67
-// │   │   │   ┌── 23
-// │   │   └── 9
-// └── 8
-//     │       ┌── 7
-//     │   ┌── 5
-//     └── 4
-//         │   ┌── 3
-//         └── 1
+const randomArray = (n, max) => {
+  const array = [];
+  for (let i = 0; i < n; i++) {
+    array[i] = Math.floor(Math.random() * (max + 1));
+  }
+  return array;
+};
 
-test.deleteItem(7);
-prettyPrint(test.root);
-// │           ┌── 6345
-// │       ┌── 324
-// │   ┌── 67
-// │   │   │   ┌── 23
-// │   │   └── 9
-// └── 8
-//     │   ┌── 5
-//     └── 4
-//         │   ┌── 3
-//         └── 1
+const array = randomArray(5, 100);
+const tree = new Tree(array);
 
-test.deleteItem(324);
-prettyPrint(test.root);
-// │       ┌── 6345
-// │   ┌── 67
-// │   │   │   ┌── 23
-// │   │   └── 9
-// └── 8
-//     │   ┌── 5
-//     └── 4
-//         │   ┌── 3
-//         └── 1
+console.log(`Tree is created from array ${array}.`);
+prettyPrint(tree.root);
 
-test.deleteItem(8);
-prettyPrint(test.root);
-// │       ┌── 6345
-// │   ┌── 67
-// │   │   └── 23
-// └── 9
-//     │   ┌── 5
-//     └── 4
-//         │   ┌── 3
-//         └── 1
+// Confirm that the tree is balanced by calling isBalanced.
+console.log(`This tree is ${tree.isBalanced() ? "" : "not "}balanced.`);
 
-let node = test.find(67);
-prettyPrint(node);
-// │   ┌── 6345
-// └── 67
-//     └── 23
+// Print out all elements in level, pre, post, and in order.
+const levelOrder = [];
+tree.levelOrder((node) => levelOrder.push(node.data));
+const preOrder = [];
+tree.preOrder((node) => preOrder.push(node.data));
+const postOrder = [];
+tree.postOrder((node) => postOrder.push(node.data));
+const inOrder = [];
+tree.inOrder((node) => inOrder.push(node.data));
 
-node = test.find(100); // null
+console.table({ levelOrder, preOrder, postOrder, inOrder });
 
-prettyPrint(test.root);
+// Unbalance the tree by adding several numbers > 100.
+const array2 = randomArray(10, 100);
+array2.forEach((data) => tree.insert(data));
+console.log("");
+console.log(`Numbers are inserted from array ${array2}.`);
 
-const arr = [];
-test.levelOrder((node) => arr.push(node.data));
-console.log(arr);
-// [9, 4, 67, 1, 5, 23, 6345, 3];
+// Confirm that the tree is unbalanced by calling isBalanced.
+console.log(`Now this tree is ${tree.isBalanced() ? "" : "not "}balanced.`);
+prettyPrint(tree.root);
 
-arr.splice(0, arr.length);
-test.inOrder((node) => arr.push(node.data));
-console.log(arr);
-// [1, 3, 4, 5, 9, 23, 67, 6345];
+// Balance the tree by calling rebalance.
+tree.rebalance();
 
-arr.splice(0, arr.length);
-test.preOrder((node) => arr.push(node.data));
-console.log(arr);
-// [9, 4, 1, 3, 5, 67, 23, 6345];
+// Confirm that the tree is balanced by calling isBalanced.
+console.log("");
+console.log("Rebalance done.");
+console.log(`Now this tree is ${tree.isBalanced() ? "" : "not "}balanced.`);
+prettyPrint(tree.root);
 
-arr.splice(0, arr.length);
-test.postOrder((node) => arr.push(node.data));
-console.log(arr);
-// [3, 1, 5, 4, 23, 6345, 67, 9];
+// Print out all elements in level, pre, post, and in order.
+levelOrder.splice(0, levelOrder.length);
+preOrder.splice(0, preOrder.length);
+postOrder.splice(0, postOrder.length);
+inOrder.splice(0, inOrder.length);
 
-console.log(test.height(test.root)); // 3
+tree.levelOrder((node) => levelOrder.push(node.data));
+tree.preOrder((node) => preOrder.push(node.data));
+tree.postOrder((node) => postOrder.push(node.data));
+tree.inOrder((node) => inOrder.push(node.data));
 
-node = test.find(1);
-console.log(test.depth(node)); // 2
-
-console.log(test.isBalanced()); // true
-test.insert(2);
-console.log(test.isBalanced()); // false
-test.rebalance();
-console.log(test.isBalanced()); // true
+console.table({ levelOrder, preOrder, postOrder, inOrder });
