@@ -121,6 +121,23 @@ class Tree {
     }
   }
 
+  levelOrderRecur(callback, discovered = [this.#root]) {
+    if (typeof callback !== "function") {
+      throw new Error("No function is provided as callback");
+    }
+    if (discovered.length === 0) {
+      return;
+    } else {
+      let current = discovered.shift();
+      if (current !== null) {
+        callback(current);
+        discovered.push(current.left);
+        discovered.push(current.right);
+      }
+      this.levelOrderRecur(callback, discovered);
+    }
+  }
+
   #deleteNode(parent, current, isLeft) {
     if (current.left === null) {
       // Deleting a leaf node falls under this case
