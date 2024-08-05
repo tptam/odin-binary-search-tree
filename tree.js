@@ -102,20 +102,15 @@ class Tree {
   }
 
   levelOrder(callback) {
-    if (this.#root === null) {
-      return;
-    }
     if (typeof callback !== "function") {
       throw new Error("No function is provided as callback");
     }
     const discovered = [this.#root];
     while (discovered.length > 0) {
       let current = discovered.shift();
-      callback(current);
-      if (current.left !== null) {
+      if (current !== null) {
+        callback(current);
         discovered.push(current.left);
-      }
-      if (current.right !== null) {
         discovered.push(current.right);
       }
     }
