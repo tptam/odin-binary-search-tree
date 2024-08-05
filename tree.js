@@ -182,6 +182,41 @@ class Tree {
     }
   }
 
+  depth(node) {
+    let current = this.#root;
+    let count = 0;
+    while (current !== node) {
+      current = node.data < current.data ? current.left : current.right;
+      count++;
+    }
+    return count;
+  }
+
+  isBalanced() {
+    return this.#balancedHeight(this.#root) !== null;
+  }
+
+  #balancedHeight(node) {
+    // Traverses depth-first.
+    // Returns null if any subtree is unbalanced, height otherwise.
+    if (node === null) {
+      return -1;
+    }
+    const leftHeight = this.#balancedHeight(node.left);
+    if (leftHeight === null) {
+      return null;
+    }
+    const rightHeight = this.#balancedHeight(node.right);
+    if (rightHeight === null) {
+      return null;
+    }
+    if (Math.abs(leftHeight - rightHeight) > 1) {
+      return null;
+    } else {
+      return Math.max(leftHeight, rightHeight) + 1;
+    }
+  }
+
   #deleteNode(parent, current, isLeft) {
     if (current.left === null) {
       // Deleting a leaf node falls under this case
