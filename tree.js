@@ -62,6 +62,69 @@ class Tree {
         current = current.right;
       }
     }
+    // The tree is empty
+    current = new Node(data);
+  }
+
+  deleteItem(data) {
+    let current = this.#root;
+    let parent = null;
+    let isLeft = false;
+    while (current !== null) {
+      if (current.data === data) {
+        this.#deleteNode(parent, current, isLeft);
+        return;
+      }
+      parent = current;
+      if (data < current.data) {
+        current = current.left;
+        isLeft = true;
+      } else {
+        current = current.right;
+        isLeft = false;
+      }
+    }
+  }
+
+  #deleteNode(parent, current, isLeft) {
+    if (current.left === null) {
+      // Deleting a leaf node falls under this case
+      // because it is the same as making parent point to null,
+      // which the both children are.
+      this.#deleteNodeWithChild(parent, isLeft, current.right);
+    } else if (current.right === null) {
+      this.#deleteNodeWithChild(parent, isLeft, current.left);
+    } else {
+      this.#deleteNodeWithChildren(current);
+    }
+  }
+
+  #deleteNodeWithChild(parent, isLeft, child) {
+    if (parent === null) {
+      this.#root = child;
+    } else {
+      if (isLeft) {
+        parent.left = child;
+      } else {
+        parent.right = child;
+      }
+    }
+  }
+
+  #deleteNodeWithChildren(node) {
+    // Identify successor (node with min value in the right subtree)
+    let sucParent = node;
+    let suc = node.right;
+    while (suc.left !== null) {
+      sucParent = suc;
+      suc = suc.left;
+    }
+
+    // Let current succeed the data
+    node.data = suc.data;
+
+    // Eliminate successor, which has no child or only right child
+    this.#deleteNodeWithChild(sucParent, true, suc.right);
   }
 }
 
