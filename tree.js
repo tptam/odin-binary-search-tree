@@ -86,6 +86,41 @@ class Tree {
     }
   }
 
+  find(value) {
+    let current = this.#root;
+    while (current !== null) {
+      if (value === current.data) {
+        return current;
+      }
+      if (value < current.data) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+    }
+    return null;
+  }
+
+  levelOrder(callback) {
+    if (this.#root === null) {
+      return;
+    }
+    if (typeof callback !== "function") {
+      throw new Error("No function is provided as callback");
+    }
+    const discovered = [this.#root];
+    while (discovered.length > 0) {
+      let current = discovered.shift();
+      callback(current);
+      if (current.left !== null) {
+        discovered.push(current.left);
+      }
+      if (current.right !== null) {
+        discovered.push(current.right);
+      }
+    }
+  }
+
   #deleteNode(parent, current, isLeft) {
     if (current.left === null) {
       // Deleting a leaf node falls under this case
