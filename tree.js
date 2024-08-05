@@ -146,6 +146,19 @@ class Tree {
     }
   }
 
+  preOrder(callback, current = this.#root) {
+    if (typeof callback !== "function") {
+      throw new Error("No function is provided as callback");
+    }
+    if (current === null) {
+      return;
+    } else {
+      callback(current);
+      this.preOrder(callback, current.left);
+      this.preOrder(callback, current.right);
+    }
+  }
+
   #deleteNode(parent, current, isLeft) {
     if (current.left === null) {
       // Deleting a leaf node falls under this case
