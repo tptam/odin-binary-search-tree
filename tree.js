@@ -172,6 +172,16 @@ class Tree {
     }
   }
 
+  height(node) {
+    if (node === null) {
+      return -1;
+    } else {
+      const leftHeight = this.height(node.left);
+      const rightHeight = this.height(node.right);
+      return Math.max(leftHeight, rightHeight) + 1;
+    }
+  }
+
   #deleteNode(parent, current, isLeft) {
     if (current.left === null) {
       // Deleting a leaf node falls under this case
