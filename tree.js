@@ -196,6 +196,12 @@ class Tree {
     return this.#balancedHeight(this.#root) !== null;
   }
 
+  rebalance() {
+    const array = [];
+    this.inOrder((node) => array.push(node.data));
+    this.#root = this.buildTree(array);
+  }
+
   #balancedHeight(node) {
     // Traverses depth-first.
     // Returns null if any subtree is unbalanced, height otherwise.
